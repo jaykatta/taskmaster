@@ -1,0 +1,8 @@
+target/
+*.class
+.idea/
+*.iml
+.DS_Store
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.backup

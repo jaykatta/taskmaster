@@ -1,75 +1,20 @@
-name: Build and Deploy to ECS
-
-on:
-  push:
-    branches: [main]
-
-permissions:
-  id-token: write
-  contents: read
-
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    environment: dev
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-      - name: Run tests
-        run: mvn -B test
-      - name: Build
-        run: mvn -B clean package -DskipTests
+      ...
 
   build-and-push-image:
     needs: build-and-test
     runs-on: ubuntu-latest
+    environment: dev
     outputs:
-      image_uri: ${{ steps.build-image.outputs.image_uri }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: ${{ vars.AWS_REGION }}
-      - id: ecr-login
-        uses: aws-actions/amazon-ecr-login@v2
-      - id: build-image
-        env:
-          ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
-          ECR_REPOSITORY: ${{ vars.ECR_REPOSITORY }}
-          IMAGE_TAG: ${{ github.sha }}
-        run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
-          echo "image_uri=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> "$GITHUB_OUTPUT"
+      ...
 
   deploy:
     needs: build-and-push-image
     runs-on: ubuntu-latest
+    environment: dev
     steps:
-      - uses: actions/checkout@v4
-      - uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: ${{ vars.AWS_REGION }}
-      - name: Download task definition
-        run: |
-          aws ecs describe-task-definition \
-            --task-definition ${{ vars.ECR_REPOSITORY }} \
-            --query taskDefinition > task-definition.json
-      - id: task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: task-definition.json
-          container-name: ${{ vars.ECR_REPOSITORY }}
-          image: ${{ needs.build-and-push-image.outputs.image_uri }}
-      - uses: aws-actions/amazon-ecs-deploy-task-definition@v2
-        with:
-          task-definition: ${{ steps.task-def.outputs.task-definition }}
-          service: ${{ vars.ECS_SERVICE }}
-          cluster: ${{ vars.ECS_CLUSTER }}
-          wait-for-service-stability: true
+      ...
