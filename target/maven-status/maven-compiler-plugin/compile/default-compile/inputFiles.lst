@@ -1,0 +1,11 @@
+/home/ec2-user/taskmaster/src/main/java/com/taskmaster/taskmaster/task/TaskStatus.java
+/home/ec2-user/taskmaster/src/main/java/com/taskmaster/taskmaster/task/TaskRepository.java
+/home/ec2-user/taskmaster/src/main/java/com/taskmaster/taskmaster/task/TaskController.java
+/home/ec2-user/taskmaster/src/main/java/com/taskmaster/taskmaster/task/TaskService.java
+/home/ec2-user/taskmaster/src/main/java/com/taskmaster/taskmaster/task/TaskRequestDto.java
+/home/ec2-user/taskmaster/src/main/java/com/taskmaster/taskmaster/TaskmasterApplication.java
+/home/ec2-user/taskmaster/src/main/java/com/taskmaster/taskmaster/task/TaskMapper.java
+/home/ec2-user/taskmaster/src/main/java/com/taskmaster/taskmaster/task/Task.java
+/home/ec2-user/taskmaster/src/main/java/com/taskmaster/taskmaster/task/TaskNotFoundException.java
+/home/ec2-user/taskmaster/src/main/java/com/taskmaster/taskmaster/task/TaskResponseDto.java
+/home/ec2-user/taskmaster/src/main/java/com/taskmaster/taskmaster/common/GlobalExceptionHandler.java
